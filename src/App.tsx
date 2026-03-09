@@ -27,6 +27,7 @@ const App = () => (
             <Route path="/analytics" element={<Analytics />} />
             <Route path="/alerts" element={<Alerts />} />
             <Route path="/settings" element={<SettingsPage />} />
+            <Route path="/install" element={<InstallPage />} />
           </Route>
           <Route path="*" element={<NotFound />} />
         </Routes>

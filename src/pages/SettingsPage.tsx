@@ -4,7 +4,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Settings, Droplets, MapPin, Save, Loader2, Sliders } from "lucide-react";
+import { Settings, Droplets, MapPin, Save, Loader2, Sliders, Download } from "lucide-react";
 import { useSettings, useUpdateSettings } from "@/hooks/useIrrigation";
 import { useState, useEffect } from "react";
 import { toast } from "sonner";

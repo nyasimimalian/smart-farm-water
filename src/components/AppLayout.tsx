@@ -9,6 +9,7 @@ const navItems = [
   { to: "/analytics", icon: BarChart3, label: "Analytics" },
   { to: "/alerts", icon: Bell, label: "Alerts" },
   { to: "/settings", icon: Settings, label: "Settings" },
+  { to: "/install", icon: Download, label: "Install App" },
 ];
 
 export default function AppLayout() {
