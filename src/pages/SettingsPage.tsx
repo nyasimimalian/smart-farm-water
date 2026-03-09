@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
-import { Settings, Droplets, MapPin, Save, Loader2 } from "lucide-react";
+import { Settings, Droplets, MapPin, Save, Loader2, Sliders } from "lucide-react";
 import { useSettings, useUpdateSettings } from "@/hooks/useIrrigation";
 import { useState, useEffect } from "react";
 import { toast } from "sonner";
@@ -38,31 +38,37 @@ export default function SettingsPage() {
   };
 
   if (isLoading) {
-    return <div className="flex items-center justify-center py-20"><Loader2 className="w-6 h-6 animate-spin text-muted-foreground" /></div>;
+    return (
+      <div className="flex items-center justify-center py-20">
+        <Loader2 className="w-6 h-6 animate-spin text-muted-foreground" />
+      </div>
+    );
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-8">
       <div>
-        <h1 className="text-2xl md:text-3xl font-display font-bold flex items-center gap-2">
-          <Settings className="w-7 h-7" />
-          Settings
-        </h1>
-        <p className="text-muted-foreground text-sm mt-1">Configure irrigation thresholds and preferences</p>
+        <div className="flex items-center gap-2 mb-1">
+          <Sliders className="w-5 h-5 text-primary" />
+          <span className="text-xs font-semibold uppercase tracking-wider text-primary">Configuration</span>
+        </div>
+        <h1 className="text-2xl md:text-3xl font-display font-extrabold tracking-tight">Settings</h1>
+        <p className="text-muted-foreground text-sm mt-1.5">Configure irrigation thresholds and preferences</p>
       </div>
 
-      <Card>
+      <Card className="glass-card overflow-hidden">
+        <div className="h-1 bg-gradient-to-r from-primary/40 to-transparent" />
         <CardHeader>
-          <CardTitle className="text-base font-display flex items-center gap-2">
-            <Droplets className="w-4 h-4" />
+          <CardTitle className="text-sm font-display font-bold flex items-center gap-2">
+            <Droplets className="w-4 h-4 text-primary" />
             Moisture Thresholds
           </CardTitle>
-          <CardDescription>Set moisture levels that trigger automatic irrigation</CardDescription>
+          <CardDescription>Define moisture levels that trigger automatic irrigation</CardDescription>
         </CardHeader>
-        <CardContent className="space-y-4">
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div className="space-y-2">
-              <Label htmlFor="low">Low Threshold (pump turns ON)</Label>
+        <CardContent className="space-y-5">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+            <div className="space-y-2.5">
+              <Label htmlFor="low" className="text-sm font-semibold">Low Threshold</Label>
               <div className="flex items-center gap-2">
                 <Input
                   id="low"
@@ -71,13 +77,14 @@ export default function SettingsPage() {
                   max={100}
                   value={low}
                   onChange={(e) => setLow(Number(e.target.value))}
+                  className="rounded-xl"
                 />
-                <span className="text-sm text-muted-foreground">%</span>
+                <span className="text-sm font-medium text-muted-foreground">%</span>
               </div>
-              <p className="text-xs text-muted-foreground">Pump activates when moisture drops below this</p>
+              <p className="text-xs text-muted-foreground">Pump activates below this level</p>
             </div>
-            <div className="space-y-2">
-              <Label htmlFor="high">High Threshold (pump turns OFF)</Label>
+            <div className="space-y-2.5">
+              <Label htmlFor="high" className="text-sm font-semibold">High Threshold</Label>
               <div className="flex items-center gap-2">
                 <Input
                   id="high"
@@ -86,45 +93,73 @@ export default function SettingsPage() {
                   max={100}
                   value={high}
                   onChange={(e) => setHigh(Number(e.target.value))}
+                  className="rounded-xl"
                 />
-                <span className="text-sm text-muted-foreground">%</span>
+                <span className="text-sm font-medium text-muted-foreground">%</span>
               </div>
-              <p className="text-xs text-muted-foreground">Pump deactivates when moisture exceeds this</p>
+              <p className="text-xs text-muted-foreground">Pump deactivates above this level</p>
             </div>
           </div>
 
-          <div className="flex items-center justify-between py-3 border-t">
+          {/* Visual threshold indicator */}
+          <div className="pt-2">
+            <div className="h-3 rounded-full bg-gradient-to-r from-status-critical/30 via-status-warning/30 to-status-optimal/30 relative overflow-hidden">
+              <div
+                className="absolute top-0 bottom-0 border-l-2 border-dashed border-status-critical"
+                style={{ left: `${low}%` }}
+              />
+              <div
+                className="absolute top-0 bottom-0 border-l-2 border-dashed border-status-optimal"
+                style={{ left: `${high}%` }}
+              />
+            </div>
+            <div className="flex justify-between text-[0.65rem] font-semibold text-muted-foreground mt-1.5">
+              <span>0% — Dry</span>
+              <span className="text-status-critical">{low}%</span>
+              <span className="text-status-optimal">{high}%</span>
+              <span>100% — Wet</span>
+            </div>
+          </div>
+
+          <div className="flex items-center justify-between pt-4 border-t border-dashed">
             <div>
-              <p className="text-sm font-medium">Automatic Irrigation</p>
-              <p className="text-xs text-muted-foreground">Enable threshold-based pump control</p>
+              <p className="text-sm font-semibold">Automatic Irrigation</p>
+              <p className="text-xs text-muted-foreground mt-0.5">Enable threshold-based pump control</p>
             </div>
             <Switch checked={autoMode} onCheckedChange={setAutoMode} />
           </div>
         </CardContent>
       </Card>
 
-      <Card>
+      <Card className="glass-card overflow-hidden">
+        <div className="h-1 bg-gradient-to-r from-accent/40 to-transparent" />
         <CardHeader>
-          <CardTitle className="text-base font-display flex items-center gap-2">
-            <MapPin className="w-4 h-4" />
+          <CardTitle className="text-sm font-display font-bold flex items-center gap-2">
+            <MapPin className="w-4 h-4 text-accent" />
             Weather Location
           </CardTitle>
-          <CardDescription>Set your farm location for weather data</CardDescription>
+          <CardDescription>Set your farm location for weather forecasts</CardDescription>
         </CardHeader>
         <CardContent>
-          <div className="space-y-2">
-            <Label htmlFor="location">City Name</Label>
+          <div className="space-y-2.5">
+            <Label htmlFor="location" className="text-sm font-semibold">City Name</Label>
             <Input
               id="location"
               value={location}
               onChange={(e) => setLocation(e.target.value)}
               placeholder="e.g., Nairobi, Kampala, Lagos"
+              className="rounded-xl"
             />
           </div>
         </CardContent>
       </Card>
 
-      <Button onClick={handleSave} disabled={updateSettings.isPending} className="w-full sm:w-auto">
+      <Button
+        onClick={handleSave}
+        disabled={updateSettings.isPending}
+        className="w-full sm:w-auto rounded-xl font-semibold shadow-md shadow-primary/15 px-8"
+        size="lg"
+      >
         {updateSettings.isPending ? (
           <Loader2 className="w-4 h-4 animate-spin mr-2" />
         ) : (
