@@ -9,6 +9,7 @@ import Index from "./pages/Index";
 import Analytics from "./pages/Analytics";
 import Alerts from "./pages/Alerts";
 import SettingsPage from "./pages/SettingsPage";
+import InstallPage from "./pages/InstallPage";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
