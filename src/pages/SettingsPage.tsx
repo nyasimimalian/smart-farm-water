@@ -21,8 +21,6 @@ const KENYA_COUNTIES = [
   "Tharaka-Nithi", "Trans-Nzoia", "Turkana", "Uasin Gishu",
   "Vihiga", "Wajir", "West Pokot",
 ];
-import { useState, useEffect } from "react";
-import { toast } from "sonner";
 
 export default function SettingsPage() {
   const { data: settings, isLoading } = useSettings();
