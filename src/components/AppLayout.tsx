@@ -1,5 +1,5 @@
 import { NavLink, Outlet } from "react-router-dom";
-import { BarChart3, Bell, Settings, Menu, X, Sprout, Leaf, Sun } from "lucide-react";
+import { BarChart3, Bell, Settings, Menu, X, Sprout, Leaf, Sun, Download } from "lucide-react";
 import { useState } from "react";
 import { cn } from "@/lib/utils";
 import { useAlerts } from "@/hooks/useIrrigation";
@@ -9,6 +9,7 @@ const navItems = [
   { to: "/analytics", icon: BarChart3, label: "Analytics" },
   { to: "/alerts", icon: Bell, label: "Alerts" },
   { to: "/settings", icon: Settings, label: "Settings" },
+  { to: "/install", icon: Download, label: "Install App" },
 ];
 
 export default function AppLayout() {
