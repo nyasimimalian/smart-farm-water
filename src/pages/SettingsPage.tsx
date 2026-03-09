@@ -3,10 +3,24 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Settings, Droplets, MapPin, Save, Loader2, Sliders } from "lucide-react";
 import { useSettings, useUpdateSettings } from "@/hooks/useIrrigation";
 import { useState, useEffect } from "react";
 import { toast } from "sonner";
+
+const KENYA_COUNTIES = [
+  "Baringo", "Bomet", "Bungoma", "Busia", "Elgeyo-Marakwet",
+  "Embu", "Garissa", "Homa Bay", "Isiolo", "Kajiado",
+  "Kakamega", "Kericho", "Kiambu", "Kilifi", "Kirinyaga",
+  "Kisii", "Kisumu", "Kitui", "Kwale", "Laikipia",
+  "Lamu", "Machakos", "Makueni", "Mandera", "Marsabit",
+  "Meru", "Migori", "Mombasa", "Murang'a", "Nairobi",
+  "Nakuru", "Nandi", "Narok", "Nyamira", "Nyandarua",
+  "Nyeri", "Samburu", "Siaya", "Taita-Taveta", "Tana River",
+  "Tharaka-Nithi", "Trans-Nzoia", "Turkana", "Uasin Gishu",
+  "Vihiga", "Wajir", "West Pokot",
+];
 
 export default function SettingsPage() {
   const { data: settings, isLoading } = useSettings();
@@ -142,14 +156,19 @@ export default function SettingsPage() {
         </CardHeader>
         <CardContent>
           <div className="space-y-2.5">
-            <Label htmlFor="location" className="text-sm font-semibold">City Name</Label>
-            <Input
-              id="location"
-              value={location}
-              onChange={(e) => setLocation(e.target.value)}
-              placeholder="e.g., Nairobi, Kampala, Lagos"
-              className="rounded-xl"
-            />
+            <Label className="text-sm font-semibold">County</Label>
+            <Select value={location} onValueChange={setLocation}>
+              <SelectTrigger className="rounded-xl">
+                <SelectValue placeholder="Select a county" />
+              </SelectTrigger>
+              <SelectContent className="max-h-60">
+                {KENYA_COUNTIES.map((county) => (
+                  <SelectItem key={county} value={county}>
+                    {county}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
           </div>
         </CardContent>
       </Card>
