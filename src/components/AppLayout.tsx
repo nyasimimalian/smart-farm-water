@@ -1,5 +1,5 @@
 import { NavLink, Outlet } from "react-router-dom";
-import { BarChart3, Bell, Settings, Menu, X, Sprout, Leaf, Sun } from "lucide-react";
+import { BarChart3, Bell, Settings, Menu, X, Sprout, Leaf, Sun, Download } from "lucide-react";
 import { useState } from "react";
 import { cn } from "@/lib/utils";
 import { useAlerts } from "@/hooks/useIrrigation";
