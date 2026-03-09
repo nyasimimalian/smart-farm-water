@@ -14,7 +14,102 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      alerts: {
+        Row: {
+          id: string
+          is_read: boolean
+          message: string
+          severity: string
+          timestamp: string
+        }
+        Insert: {
+          id?: string
+          is_read?: boolean
+          message: string
+          severity: string
+          timestamp?: string
+        }
+        Update: {
+          id?: string
+          is_read?: boolean
+          message?: string
+          severity?: string
+          timestamp?: string
+        }
+        Relationships: []
+      }
+      pump_log: {
+        Row: {
+          activation_time: string
+          deactivation_time: string | null
+          id: string
+          pump_status: string
+        }
+        Insert: {
+          activation_time?: string
+          deactivation_time?: string | null
+          id?: string
+          pump_status: string
+        }
+        Update: {
+          activation_time?: string
+          deactivation_time?: string | null
+          id?: string
+          pump_status?: string
+        }
+        Relationships: []
+      }
+      sensor_data: {
+        Row: {
+          humidity: number
+          id: string
+          moisture_level: number
+          temperature: number
+          timestamp: string
+        }
+        Insert: {
+          humidity: number
+          id?: string
+          moisture_level: number
+          temperature: number
+          timestamp?: string
+        }
+        Update: {
+          humidity?: number
+          id?: string
+          moisture_level?: number
+          temperature?: number
+          timestamp?: string
+        }
+        Relationships: []
+      }
+      settings: {
+        Row: {
+          auto_mode: boolean
+          id: string
+          moisture_threshold_high: number
+          moisture_threshold_low: number
+          updated_at: string
+          weather_location: string
+        }
+        Insert: {
+          auto_mode?: boolean
+          id?: string
+          moisture_threshold_high?: number
+          moisture_threshold_low?: number
+          updated_at?: string
+          weather_location?: string
+        }
+        Update: {
+          auto_mode?: boolean
+          id?: string
+          moisture_threshold_high?: number
+          moisture_threshold_low?: number
+          updated_at?: string
+          weather_location?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
