@@ -158,14 +158,19 @@ export default function SettingsPage() {
         </CardHeader>
         <CardContent>
           <div className="space-y-2.5">
-            <Label htmlFor="location" className="text-sm font-semibold">City Name</Label>
-            <Input
-              id="location"
-              value={location}
-              onChange={(e) => setLocation(e.target.value)}
-              placeholder="e.g., Nairobi, Kampala, Lagos"
-              className="rounded-xl"
-            />
+            <Label className="text-sm font-semibold">County</Label>
+            <Select value={location} onValueChange={setLocation}>
+              <SelectTrigger className="rounded-xl">
+                <SelectValue placeholder="Select a county" />
+              </SelectTrigger>
+              <SelectContent className="max-h-60">
+                {KENYA_COUNTIES.map((county) => (
+                  <SelectItem key={county} value={county}>
+                    {county}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
           </div>
         </CardContent>
       </Card>
