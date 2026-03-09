@@ -173,19 +173,32 @@ export default function SettingsPage() {
         </CardContent>
       </Card>
 
-      <Button
-        onClick={handleSave}
-        disabled={updateSettings.isPending}
-        className="w-full sm:w-auto rounded-xl font-semibold shadow-md shadow-primary/15 px-8"
-        size="lg"
-      >
-        {updateSettings.isPending ? (
-          <Loader2 className="w-4 h-4 animate-spin mr-2" />
-        ) : (
-          <Save className="w-4 h-4 mr-2" />
-        )}
-        Save Settings
-      </Button>
+      <div className="flex flex-col sm:flex-row gap-3">
+        <Button
+          onClick={handleSave}
+          disabled={updateSettings.isPending}
+          className="w-full sm:w-auto rounded-xl font-semibold shadow-md shadow-primary/15 px-8"
+          size="lg"
+        >
+          {updateSettings.isPending ? (
+            <Loader2 className="w-4 h-4 animate-spin mr-2" />
+          ) : (
+            <Save className="w-4 h-4 mr-2" />
+          )}
+          Save Settings
+        </Button>
+        <Button
+          variant="outline"
+          size="lg"
+          className="w-full sm:w-auto rounded-xl font-semibold px-8"
+          asChild
+        >
+          <a href="/install">
+            <Download className="w-4 h-4 mr-2" />
+            Install App
+          </a>
+        </Button>
+      </div>
     </div>
   );
 }
