@@ -21,6 +21,7 @@ export type Database = {
           message: string
           severity: string
           timestamp: string
+          user_id: string | null
         }
         Insert: {
           id?: string
@@ -28,6 +29,7 @@ export type Database = {
           message: string
           severity: string
           timestamp?: string
+          user_id?: string | null
         }
         Update: {
           id?: string
@@ -35,6 +37,37 @@ export type Database = {
           message?: string
           severity?: string
           timestamp?: string
+          user_id?: string | null
+        }
+        Relationships: []
+      }
+      profiles: {
+        Row: {
+          avatar_url: string | null
+          created_at: string
+          display_name: string | null
+          farm_name: string | null
+          id: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          avatar_url?: string | null
+          created_at?: string
+          display_name?: string | null
+          farm_name?: string | null
+          id?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          avatar_url?: string | null
+          created_at?: string
+          display_name?: string | null
+          farm_name?: string | null
+          id?: string
+          updated_at?: string
+          user_id?: string
         }
         Relationships: []
       }
@@ -44,18 +77,21 @@ export type Database = {
           deactivation_time: string | null
           id: string
           pump_status: string
+          user_id: string | null
         }
         Insert: {
           activation_time?: string
           deactivation_time?: string | null
           id?: string
           pump_status: string
+          user_id?: string | null
         }
         Update: {
           activation_time?: string
           deactivation_time?: string | null
           id?: string
           pump_status?: string
+          user_id?: string | null
         }
         Relationships: []
       }
@@ -66,6 +102,7 @@ export type Database = {
           moisture_level: number
           temperature: number
           timestamp: string
+          user_id: string | null
         }
         Insert: {
           humidity: number
@@ -73,6 +110,7 @@ export type Database = {
           moisture_level: number
           temperature: number
           timestamp?: string
+          user_id?: string | null
         }
         Update: {
           humidity?: number
@@ -80,6 +118,7 @@ export type Database = {
           moisture_level?: number
           temperature?: number
           timestamp?: string
+          user_id?: string | null
         }
         Relationships: []
       }
@@ -90,6 +129,7 @@ export type Database = {
           moisture_threshold_high: number
           moisture_threshold_low: number
           updated_at: string
+          user_id: string | null
           weather_location: string
         }
         Insert: {
@@ -98,6 +138,7 @@ export type Database = {
           moisture_threshold_high?: number
           moisture_threshold_low?: number
           updated_at?: string
+          user_id?: string | null
           weather_location?: string
         }
         Update: {
@@ -106,6 +147,7 @@ export type Database = {
           moisture_threshold_high?: number
           moisture_threshold_low?: number
           updated_at?: string
+          user_id?: string | null
           weather_location?: string
         }
         Relationships: []

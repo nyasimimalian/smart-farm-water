@@ -1,9 +1,11 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/contexts/AuthContext";
 
 export function useLatestSensorData() {
+  const { user } = useAuth();
   return useQuery({
-    queryKey: ["sensor-data-latest"],
+    queryKey: ["sensor-data-latest", user?.id],
     queryFn: async () => {
       const { data, error } = await supabase
         .from("sensor_data")
@@ -14,13 +16,15 @@ export function useLatestSensorData() {
       if (error) throw error;
       return data;
     },
+    enabled: !!user,
     refetchInterval: 5000,
   });
 }
 
 export function useSensorHistory(hours = 24) {
+  const { user } = useAuth();
   return useQuery({
-    queryKey: ["sensor-history", hours],
+    queryKey: ["sensor-history", hours, user?.id],
     queryFn: async () => {
       const since = new Date(Date.now() - hours * 60 * 60 * 1000).toISOString();
       const { data, error } = await supabase
@@ -31,13 +35,15 @@ export function useSensorHistory(hours = 24) {
       if (error) throw error;
       return data ?? [];
     },
+    enabled: !!user,
     refetchInterval: 10000,
   });
 }
 
 export function useLatestPumpStatus() {
+  const { user } = useAuth();
   return useQuery({
-    queryKey: ["pump-status"],
+    queryKey: ["pump-status", user?.id],
     queryFn: async () => {
       const { data, error } = await supabase
         .from("pump_log")
@@ -48,13 +54,15 @@ export function useLatestPumpStatus() {
       if (error) throw error;
       return data;
     },
+    enabled: !!user,
     refetchInterval: 5000,
   });
 }
 
 export function usePumpHistory() {
+  const { user } = useAuth();
   return useQuery({
-    queryKey: ["pump-history"],
+    queryKey: ["pump-history", user?.id],
     queryFn: async () => {
       const { data, error } = await supabase
         .from("pump_log")
@@ -64,13 +72,15 @@ export function usePumpHistory() {
       if (error) throw error;
       return data ?? [];
     },
+    enabled: !!user,
     refetchInterval: 10000,
   });
 }
 
 export function useAlerts(unreadOnly = false) {
+  const { user } = useAuth();
   return useQuery({
-    queryKey: ["alerts", unreadOnly],
+    queryKey: ["alerts", unreadOnly, user?.id],
     queryFn: async () => {
       let query = supabase
         .from("alerts")
@@ -82,22 +92,41 @@ export function useAlerts(unreadOnly = false) {
       if (error) throw error;
       return data ?? [];
     },
+    enabled: !!user,
     refetchInterval: 5000,
   });
 }
 
 export function useSettings() {
+  const { user } = useAuth();
   return useQuery({
-    queryKey: ["settings"],
+    queryKey: ["settings", user?.id],
     queryFn: async () => {
       const { data, error } = await supabase
         .from("settings")
         .select("*")
         .limit(1)
-        .single();
+        .maybeSingle();
       if (error) throw error;
+      // If no settings exist for this user, create default ones
+      if (!data && user) {
+        const { data: newData, error: insertError } = await supabase
+          .from("settings")
+          .insert({
+            user_id: user.id,
+            moisture_threshold_low: 30,
+            moisture_threshold_high: 60,
+            weather_location: "Nairobi",
+            auto_mode: true,
+          })
+          .select()
+          .single();
+        if (insertError) throw insertError;
+        return newData;
+      }
       return data;
     },
+    enabled: !!user,
   });
 }
 
@@ -121,10 +150,11 @@ export function useUpdateSettings() {
 
 export function useTogglePump() {
   const qc = useQueryClient();
+  const { user } = useAuth();
   return useMutation({
     mutationFn: async (status: "ON" | "OFF") => {
+      if (!user) throw new Error("Not authenticated");
       if (status === "OFF") {
-        // Deactivate current pump
         const { data: current } = await supabase
           .from("pump_log")
           .select("*")
@@ -139,17 +169,16 @@ export function useTogglePump() {
             .update({ pump_status: "OFF", deactivation_time: new Date().toISOString() })
             .eq("id", current.id);
         }
-        // Insert OFF log
-        const { error } = await supabase.from("pump_log").insert({ pump_status: "OFF" });
+        const { error } = await supabase.from("pump_log").insert({ pump_status: "OFF", user_id: user.id });
         if (error) throw error;
       } else {
-        const { error } = await supabase.from("pump_log").insert({ pump_status: "ON" });
+        const { error } = await supabase.from("pump_log").insert({ pump_status: "ON", user_id: user.id });
         if (error) throw error;
       }
-      // Create alert
       await supabase.from("alerts").insert({
         message: `Pump manually turned ${status}`,
         severity: "info",
+        user_id: user.id,
       });
     },
     onSuccess: () => {

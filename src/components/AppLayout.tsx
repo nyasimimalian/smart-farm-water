@@ -1,6 +1,7 @@
 import { NavLink, Outlet } from "react-router-dom";
-import { BarChart3, Bell, Settings, Menu, X, Sprout, Leaf, Sun, Download } from "lucide-react";
+import { BarChart3, Bell, Settings, Menu, X, Sprout, Leaf, Sun, Download, LogOut } from "lucide-react";
 import { useState } from "react";
+import { useAuth } from "@/contexts/AuthContext";
 import { cn } from "@/lib/utils";
 import { useAlerts } from "@/hooks/useIrrigation";
 
@@ -16,6 +17,7 @@ export default function AppLayout() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const { data: alerts } = useAlerts(true);
   const unreadCount = alerts?.length ?? 0;
+  const { user, signOut } = useAuth();
 
   return (
     <div className="flex min-h-screen bg-background">
@@ -72,8 +74,8 @@ export default function AppLayout() {
           ))}
         </nav>
 
-        {/* Footer with illustration hint */}
-        <div className="p-5">
+        {/* User info and sign out */}
+        <div className="p-5 space-y-3">
           <div className="rounded-2xl bg-sidebar-accent/60 border border-sidebar-border p-4">
             <div className="flex items-center gap-2 mb-2">
               <Sun className="w-4 h-4 text-secondary animate-float" />
@@ -82,6 +84,18 @@ export default function AppLayout() {
             <p className="text-[0.7rem] text-sidebar-foreground/50 leading-relaxed">
               Morning irrigation reduces water loss from evaporation by up to 30%.
             </p>
+          </div>
+          <div className="flex items-center gap-2 px-2">
+            <div className="flex-1 min-w-0">
+              <p className="text-xs font-semibold text-sidebar-foreground/70 truncate">{user?.email}</p>
+            </div>
+            <button
+              onClick={signOut}
+              className="p-2 rounded-xl hover:bg-sidebar-accent text-sidebar-foreground/50 hover:text-sidebar-foreground transition-colors"
+              title="Sign out"
+            >
+              <LogOut className="w-4 h-4" />
+            </button>
           </div>
         </div>
       </aside>
