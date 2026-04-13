@@ -17,6 +17,7 @@ export default function AppLayout() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const { data: alerts } = useAlerts(true);
   const unreadCount = alerts?.length ?? 0;
+  const { user, signOut } = useAuth();
 
   return (
     <div className="flex min-h-screen bg-background">
